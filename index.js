@@ -6,6 +6,16 @@ import App from "./app/app.tsx"
 import React from "react"
 import { AppRegistry } from "react-native"
 import RNBootSplash from "react-native-bootsplash"
+import { Amplify } from "aws-amplify"
+import config from "./src/aws-exports"
+Amplify.configure({
+  ...config,
+  oauth : {
+    ...config.oauth,
+    redirectSignIn: 'igniteamplify://',
+    redirectSignOut: 'igniteamplify://',
+  }
+})
 
 function IgniteApp() {
   return <App hideSplashScreen={RNBootSplash.hide} />

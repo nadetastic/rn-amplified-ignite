@@ -11,6 +11,8 @@ import { AppStackScreenProps } from "../navigators" // @demo remove-current-line
 import { colors, spacing } from "../theme"
 import { useHeader } from "../utils/useHeader" // @demo remove-current-line
 import { useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle"
+import { Auth } from "aws-amplify"
+import { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth"
 
 const welcomeLogo = require("../../assets/images/logo.png")
 const welcomeFace = require("../../assets/images/welcome-face.png")
@@ -28,6 +30,16 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeSc
 
   function goNext() {
     navigation.navigate("Demo", { screen: "DemoShowroom" })
+  }
+
+  const signInWithGoogle = async () => {
+    try {
+      await Auth.federatedSignIn({
+        provider: CognitoHostedUIIdentityProvider.Google,
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   useHeader(
@@ -64,6 +76,8 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeSc
           tx="welcomeScreen.letsGo"
           onPress={goNext}
         />
+        <Button onPress={signInWithGoogle} text="Google" />
+        <Button onPress={async () => await Auth.signOut()} text="Sign Out" />
         {/* @demo remove-block-end */}
       </View>
     </View>
